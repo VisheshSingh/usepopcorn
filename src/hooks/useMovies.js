@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
-const KEY = '8142efc1';
-
 const useMovies = (query) => {
+  const KEY = '8142efc1';
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [movies, setMovies] = useState([]);

@@ -3,13 +3,13 @@ import { StarRating } from './StarRating';
 import Loader from './Loader';
 import useKey from '../hooks/useKey';
 
-const KEY = '8142efc1';
 const MovieDetails = ({
   watched,
   selectedMovieId,
   onCloseMovie,
   onAddMovie,
 }) => {
+  const KEY = '8142efc1';
   const [isLoading, setIsLoading] = useState(false);
   const [movie, setMovie] = useState({});
   const [userRating, setUserRating] = useState(0);
