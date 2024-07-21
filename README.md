@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# usePopcorn
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React app built using OMDB API with custom hooks
+
+![usepopcorn](https://github.com/user-attachments/assets/1ca1de25-c8a9-4ad1-9ee8-fda4e056d7dd)
+
 
 ## Available Scripts
 
