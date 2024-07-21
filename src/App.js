@@ -9,16 +9,13 @@ import ErrorMessage from './components/ErrorMessage';
 import WatchedMovieList from './components/WatchedMovieList';
 import MovieDetails from './components/MovieDetails';
 import useMovies from './hooks/useMovies';
+import useLocalStorage from './hooks/useLocalStorage';
 
 export default function App() {
-  const [watched, setWatched] = useState(function () {
-    const storeValue = localStorage.getItem('watched')
-      ? JSON.parse(localStorage.getItem('watched'))
-      : [];
-    return storeValue;
-  });
   const [query, setQuery] = useState('');
   const [selectedMovieId, setSelectedMovieId] = useState('');
+
+  const [watched, setWatched] = useLocalStorage([], 'watched');
 
   // custom hook to fetch movies
   const { isLoading, error, movies } = useMovies(query);
