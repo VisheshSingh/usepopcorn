@@ -8,13 +8,9 @@ import WatchedSummary from './components/WatchedSummary';
 import ErrorMessage from './components/ErrorMessage';
 import WatchedMovieList from './components/WatchedMovieList';
 import MovieDetails from './components/MovieDetails';
-
-const KEY = '8142efc1';
+import useMovies from './hooks/useMovies';
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(function () {
     const storeValue = localStorage.getItem('watched')
       ? JSON.parse(localStorage.getItem('watched'))
@@ -24,41 +20,8 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [selectedMovieId, setSelectedMovieId] = useState('');
 
-  const URL = `https://www.omdbapi.com/?&apikey=${KEY}&s=${query}`;
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    const fetchMovies = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const res = await fetch(URL, { signal });
-        const data = await res.json();
-        setMovies(data.Search);
-      } catch (err) {
-        if (err.name === 'AbortError') {
-          console.log('Fetch aborted');
-        } else {
-          setError(err.message);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (!query.length) {
-      setMovies([]);
-      setError(null);
-    }
-
-    fetchMovies();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [query, KEY]);
+  // custom hook to fetch movies
+  const { isLoading, error, movies } = useMovies(query);
 
   // Store watched to local storage
   useEffect(() => {
@@ -92,7 +55,7 @@ export default function App() {
       <main className='main'>
         <div className='box'>
           {isLoading && <Loader />}
-          {error && <ErrorMessage />}
+          {error && <ErrorMessage error={error} />}
           {!isLoading && !error && (
             <MoviesList movies={movies} onSelectMovie={handleSelectMovie} />
           )}
