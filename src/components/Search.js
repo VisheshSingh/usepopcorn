@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Search = ({ query, onChangeQuery }) => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    function cb(e) {
+      if (document.activeElement === inputRef.current) return;
+
+      if (e.code === 'Enter') {
+        inputRef.current.focus();
+        onChangeQuery('');
+      }
+    }
+    document.addEventListener('keydown', cb);
+
+    return () => {
+      document.removeEventListener('keydown', cb);
+    };
+  }, []);
+
   return (
     <input
       className='search'
@@ -8,6 +26,7 @@ const Search = ({ query, onChangeQuery }) => {
       placeholder='Search movies...'
       value={query}
       onChange={(e) => onChangeQuery(e.target.value)}
+      ref={inputRef}
     />
   );
 };
