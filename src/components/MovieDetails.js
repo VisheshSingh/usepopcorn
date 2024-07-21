@@ -35,6 +35,11 @@ const MovieDetails = ({ selectedMovieId, onCloseMovie }) => {
     };
     fetchMovie();
   }, [selectedMovieId]);
+
+  useEffect(() => {
+    document.title = title ? title : 'usePopcorn 🍿';
+  }, [title]);
+
   return (
     <div className='details'>
       {isLoading ? (
