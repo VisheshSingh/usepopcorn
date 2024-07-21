@@ -19,7 +19,7 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [selectedMovieId, setSelectedMovieId] = useState('');
 
-  const URL = `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`;
+  const URL = `https://www.omdbapi.com/?&apikey=${KEY}&s=${query}`;
 
   useEffect(() => {
     const fetchMovies = async () => {

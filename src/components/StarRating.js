@@ -49,7 +49,7 @@ export const StarRating = ({
 
 function Star({
   full,
-  color = '#000',
+  color = 'gold',
   onRate,
   onHoverIn,
   onHoverOut,
