@@ -50,7 +50,12 @@ const MovieDetails = ({
   }, [selectedMovieId]);
 
   useEffect(() => {
-    document.title = title ? title : 'usePopcorn 🍿';
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+
+    return () => {
+      document.title = `usePopcorn 🍿`;
+    };
   }, [title]);
 
   const handleAddMovie = () => {

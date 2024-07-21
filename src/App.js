@@ -22,15 +22,22 @@ export default function App() {
   const URL = `https://www.omdbapi.com/?&apikey=${KEY}&s=${query}`;
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const res = await fetch(URL);
+        const res = await fetch(URL, { signal });
         const data = await res.json();
         setMovies(data.Search);
       } catch (err) {
-        setError(err.message);
+        if (err.name === 'AbortError') {
+          console.log('Fetch aborted');
+        } else {
+          setError(err.message);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -42,6 +49,10 @@ export default function App() {
     }
 
     fetchMovies();
+
+    return () => {
+      abortController.abort();
+    };
   }, [query, KEY]);
 
   const handleSelectMovie = (id) => {
