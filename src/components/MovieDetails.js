@@ -3,9 +3,15 @@ import { StarRating } from './StarRating';
 import Loader from './Loader';
 
 const KEY = '8142efc1';
-const MovieDetails = ({ selectedMovieId, onCloseMovie }) => {
+const MovieDetails = ({
+  watched,
+  selectedMovieId,
+  onCloseMovie,
+  onAddMovie,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [movie, setMovie] = useState({});
+  const [userRating, setUserRating] = useState(0);
   const URL = `https://www.omdbapi.com/?&apikey=${KEY}&i=${selectedMovieId}`;
 
   const {
@@ -20,6 +26,13 @@ const MovieDetails = ({ selectedMovieId, onCloseMovie }) => {
     Runtime: runtime,
     imdbRating,
   } = movie;
+
+  const isWatched = watched
+    .map((movie) => movie.imdbID)
+    .includes(selectedMovieId);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID === selectedMovieId
+  )?.userRating;
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -39,6 +52,20 @@ const MovieDetails = ({ selectedMovieId, onCloseMovie }) => {
   useEffect(() => {
     document.title = title ? title : 'usePopcorn 🍿';
   }, [title]);
+
+  const handleAddMovie = () => {
+    const newMovie = {
+      imdbID: selectedMovieId,
+      title,
+      year,
+      poster,
+      imdbRating,
+      userRating: Number(userRating),
+      runtime: Number(runtime.split(' ')[0]),
+    };
+    onAddMovie(newMovie);
+    onCloseMovie();
+  };
 
   return (
     <div className='details'>
@@ -65,7 +92,24 @@ const MovieDetails = ({ selectedMovieId, onCloseMovie }) => {
           </header>
           <section>
             <div className='rating'>
-              <StarRating maxRating={10} size={24} />
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button className='btn-add' onClick={handleAddMovie}>
+                      + Add to watched list
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>
+                  You rated this movie at {watchedUserRating} <span>⭐️</span>{' '}
+                </p>
+              )}
             </div>
             <p>
               <em>{plot}</em>

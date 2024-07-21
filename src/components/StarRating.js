@@ -12,7 +12,6 @@ export const StarRating = ({
 
   const containerStyle = {
     display: 'flex',
-    gap: '1rem',
     alignItems: 'center',
   };
 
