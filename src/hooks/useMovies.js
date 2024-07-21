@@ -51,7 +51,7 @@ const useMovies = (query) => {
     return () => {
       abortController.abort();
     };
-  }, [query, KEY]);
+  }, [query, KEY, URL]);
 
   return { isLoading, error, movies };
 };
