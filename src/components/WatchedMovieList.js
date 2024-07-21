@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import MoviesList from './MoviesList';
-import WatchedSummary from './WatchedSummary';
 
 const tempWatchedData = [
   {
@@ -25,14 +24,13 @@ const tempWatchedData = [
   },
 ];
 
-const WatchedBox = () => {
+const WatchedMovieList = () => {
   const [movies, setMovies] = useState(tempWatchedData);
 
   return (
     <>
       <main className='main'>
         <div className='box'>
-          <WatchedSummary watched={movies} />
           <MoviesList movies={movies} />
         </div>
       </main>
@@ -40,4 +38,4 @@ const WatchedBox = () => {
   );
 };
 
-export default WatchedBox;
+export default WatchedMovieList;

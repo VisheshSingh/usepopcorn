@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Logo from './components/Logo';
 import Search from './components/Search';
+import Loader from './components/Loader';
 import NumMovies from './components/NumMovies';
 import MoviesList from './components/MoviesList';
-import WatchedBox from './components/WatchedBox';
+import WatchedSummary from './components/WatchedSummary';
+import ErrorMessage from './components/ErrorMessage';
+import WatchedMovieList from './components/WatchedMovieList';
+
+const KEY = '8142efc1';
 
 const tempMovieData = [
   {
@@ -30,23 +35,55 @@ const tempMovieData = [
 ];
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [query, setQuery] = useState('');
+
+  const URL = `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`;
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const res = await fetch(URL);
+        const data = await res.json();
+        setMovies(data.Search);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (!query.length) {
+      setMovies([]);
+      setError(null);
+    }
+
+    fetchMovies();
+  }, [query, KEY]);
 
   return (
     <>
       <nav className='nav-bar'>
         <Logo />
-        <Search />
+        <Search query={query} onChangeQuery={setQuery} />
         <NumMovies movies={movies} />
       </nav>
 
       <main className='main'>
         <div className='box'>
-          <MoviesList movies={movies} />
+          {isLoading && <Loader />}
+          {error && <ErrorMessage />}
+          {!isLoading && !error && <MoviesList movies={movies} />}
         </div>
 
         <div className='box'>
-          <WatchedBox />
+          <WatchedSummary watched={watched} />
+          <WatchedMovieList />
         </div>
       </main>
     </>
