@@ -14,7 +14,7 @@ const Loader = () => {
         x='0px'
         y='0px'
         viewBox='0 0 100 100'
-        enable-background='new 0 0 100 100'
+        enableBackground='new 0 0 100 100'
       >
         <path
           fill='#fff'
