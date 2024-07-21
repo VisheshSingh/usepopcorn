@@ -15,7 +15,12 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    const storeValue = localStorage.getItem('watched')
+      ? JSON.parse(localStorage.getItem('watched'))
+      : [];
+    return storeValue;
+  });
   const [query, setQuery] = useState('');
   const [selectedMovieId, setSelectedMovieId] = useState('');
 
@@ -54,6 +59,11 @@ export default function App() {
       abortController.abort();
     };
   }, [query, KEY]);
+
+  // Store watched to local storage
+  useEffect(() => {
+    localStorage.setItem('watched', JSON.stringify(watched));
+  }, [watched]);
 
   const handleSelectMovie = (id) => {
     setSelectedMovieId((selectedId) => (selectedId === id ? null : id));
