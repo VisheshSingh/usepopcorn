@@ -50,7 +50,7 @@ const MovieDetails = ({
       }
     };
     fetchMovie();
-  }, [selectedMovieId]);
+  }, [selectedMovieId, URL]);
 
   useEffect(() => {
     if (!title) return;
