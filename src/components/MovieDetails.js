@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StarRating } from './StarRating';
 import Loader from './Loader';
+import useKey from '../hooks/useKey';
 
 const KEY = '8142efc1';
 const MovieDetails = ({
@@ -60,18 +61,8 @@ const MovieDetails = ({
     };
   }, [title]);
 
-  useEffect(() => {
-    function cb(e) {
-      if (e.code === 'Escape') {
-        onCloseMovie();
-      }
-    }
-
-    document.addEventListener('keydown', cb);
-    return () => {
-      document.removeEventListener('keydown', cb);
-    };
-  }, []);
+  // Close selected movie when ESC is pressed
+  useKey('Escape', onCloseMovie);
 
   useEffect(() => {
     if (userRating) countRef.current++;
