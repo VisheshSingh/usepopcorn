@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StarRating } from './StarRating';
 import Loader from './Loader';
 
@@ -13,6 +13,8 @@ const MovieDetails = ({
   const [movie, setMovie] = useState({});
   const [userRating, setUserRating] = useState(0);
   const URL = `https://www.omdbapi.com/?&apikey=${KEY}&i=${selectedMovieId}`;
+
+  const countRef = useRef(0);
 
   const {
     Title: title,
@@ -71,6 +73,10 @@ const MovieDetails = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (userRating) countRef.current++;
+  }, [userRating]);
+
   const handleAddMovie = () => {
     const newMovie = {
       imdbID: selectedMovieId,
@@ -80,6 +86,7 @@ const MovieDetails = ({
       imdbRating,
       userRating: Number(userRating),
       runtime: Number(runtime.split(' ')[0]),
+      countRatingDecisions: countRef.current,
     };
     onAddMovie(newMovie);
     onCloseMovie();
